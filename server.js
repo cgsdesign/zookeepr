@@ -1,7 +1,14 @@
 // npm init -y  then npm i express to install express (npm init -y) stands for implicit yes to all prompts
+// git add -A
+// git commit -m "Add Heroku"
+// git push heroku feature/MVP:main = to bypass heroku not willing ot go to anything not main
+
+
+
+
 const express = require('express')
 const { animals } = require('./data/animals'); //rout front end can get data from
-
+const PORT = process.env.PORT || 3001;
 const app = express(); //startes express
 
 //filter first, then plug how to filter into get formula
@@ -57,6 +64,6 @@ app.get('/api/animals', (req, res) => {
 
 
 //port below is one of many options, some have restrictions on then while 80 and 443(https) are normal for most sites
-app.listen(3001, () => {
-    console.log(`API server now on port 3001!`);
+app.listen(PORT, () => {
+    console.log(`API server now on port ${PORT}!`);
   });//listen
