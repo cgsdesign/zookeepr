@@ -11,12 +11,16 @@
 //will have to run servers each time
 //node server.js - this is how we run the code so we can see it on the server. The http will be http://localhost:PORTNUMBER/DATA/QUALIFIERS
 
-
 const express = require('express')
 const { animals } = require('./data/animals'); //rout front end can get data from
 const PORT = process.env.PORT || 3001;
 const app = express(); //startes express
 
+//-----------------------------------------//
+//------STARTING GET REQUESTS (Fetch API)-------------//
+//-----------------------------------------//
+
+//ROUT 1 Functions
 //filter first, then plug how to filter into get formula
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -58,12 +62,12 @@ function filterByQuery(query, animalsArray) {
 }
 
 
-
+//Rout 2 function
 function findById(id, animalsArray) {
   const result = animalsArray.filter(animal => animal.id === id)[0];
   return result;
 }
-//ROUT 1
+//ROUT 1 CALL
 //below /api/animals' = route string  to get data,   (req, res)call back funtion to execute every time rout is accesses with git request
 app.get('/api/animals', (req, res) => {
     let results = animals;
@@ -73,7 +77,8 @@ app.get('/api/animals', (req, res) => {
     res.json(results);
   });
     //res.json(animals);//replace send with .json to send normal API json data
-//ROUT 2
+
+//ROUT 2 CALL
 app.get('/api/animals/:id', (req, res) => {
     const result = findById(req.params.id, animals);//findByID for single search paramater
     if (result) {
@@ -85,7 +90,19 @@ app.get('/api/animals/:id', (req, res) => {
 //!!!!!!!!!!!!!!!!!!!!_____________WHAT DOES THIS MEAN A param route must come after the other GET route.   
 //findByID(req.params...) id when you only need to find ONE result becasue ID is unique. Consequently no need for coplicated query function used with filteredResults 
 
+//-----------------------------------------//
+//------STARTING POST REQUESTS-------------//
+//-----------------------------------------//
 
+app.post('/api/animals', (req, res) => {
+  // req.body is where our incoming content will be
+  console.log(req.body);
+  res.json(req.body);
+});
+
+
+
+//CALL SEARCHES LISTENER
 //port below is one of many options, some have restrictions on then while 80 and 443(https) are normal for most sites
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
