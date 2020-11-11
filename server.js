@@ -2,7 +2,11 @@
 // git add -A
 // git commit -m "Add Heroku"
 // git push heroku feature/MVP:main = to bypass heroku not willing ot go to anything not main
-
+// npm install
+// npm  init express
+//npm init y
+//will have to run servers each time
+//node server.js - this is how we run the code so we can see it on the server. The http will be http://localhost:PORTNUMBER/DATA/QUALIFIERS
 
 
 
