@@ -139,7 +139,12 @@ app.post('/api/animals', (req, res) => {
   }
 });
 
-
+//-------------------------------------------------//
+//-----STARTING CODE TO CONNECT WITH LIVE PAGE-----//
+//-------------------------------------------------//
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
 
 //CALL SEARCHES LISTENER
 //port below is one of many options, some have restrictions on then while 80 and 443(https) are normal for most sites
