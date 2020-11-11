@@ -1,13 +1,15 @@
 // npm init -y  then npm i express to install express (npm init -y) stands for implicit yes to all prompts
 // git add -A
 // git commit -m "Add Heroku"
-// git push heroku feature/MVP:main = to bypass heroku not willing ot go to anything not main
+// git push heroku feature/MVP:main = to bypass heroku not willing to go to anything not main
+// NOTE branch MUST be commited first indempendantly or this wont work. 
+//to see life site, comand line heroku open
+// to run with animals  https://shrouded-castle-54418.herokuapp.com/api/animals
 // npm install
 // npm  init express
 //npm init y
 //will have to run servers each time
 //node server.js - this is how we run the code so we can see it on the server. The http will be http://localhost:PORTNUMBER/DATA/QUALIFIERS
-
 
 
 const express = require('express')
@@ -55,16 +57,33 @@ function filterByQuery(query, animalsArray) {
     return filteredResults
 }
 
+
+
+function findById(id, animalsArray) {
+  const result = animalsArray.filter(animal => animal.id === id)[0];
+  return result;
+}
+//ROUT 1
 //below /api/animals' = route string  to get data,   (req, res)call back funtion to execute every time rout is accesses with git request
 app.get('/api/animals', (req, res) => {
     let results = animals;
     if (req.query) {
-      results = filterByQuery(req.query, results);
+      results = filterByQuery(req.query, results);// filterByQuery for multiple paramiters
     }
     res.json(results);
   });
     //res.json(animals);//replace send with .json to send normal API json data
-
+//ROUT 2
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);//findByID for single search paramater
+    if (result) {
+      res.json(result);
+    } else {
+      res.send(404);//IF NO ANIMAL
+    }
+});
+//!!!!!!!!!!!!!!!!!!!!_____________WHAT DOES THIS MEAN A param route must come after the other GET route.   
+//findByID(req.params...) id when you only need to find ONE result becasue ID is unique. Consequently no need for coplicated query function used with filteredResults 
 
 
 //port below is one of many options, some have restrictions on then while 80 and 443(https) are normal for most sites
