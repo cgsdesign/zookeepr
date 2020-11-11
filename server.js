@@ -11,11 +11,18 @@
 //will have to run servers each time
 //node server.js - this is how we run the code so we can see it on the server. The http will be http://localhost:PORTNUMBER/DATA/QUALIFIERS
 
+const fs = require('fs');
+const path = require('path');
+//bove is needed to make editing our database file possible
 const express = require('express')
 const { animals } = require('./data/animals'); //rout front end can get data from
 const PORT = process.env.PORT || 3001;
 const app = express(); //startes express
-
+//!!!!!!!!!!____________Both ofhte section below MUST BE INCLUDED IF ACCEPTING POST DATA
+// parse incoming string or array data
+app.use(express.urlencoded({ extended: true }));//{ extended: true } means that we may have sub aray data coming in, so it will need ot parse it
+// parse incoming JSON data
+app.use(express.json());
 //-----------------------------------------//
 //------STARTING GET REQUESTS (Fetch API)-------------//
 //-----------------------------------------//
@@ -93,11 +100,43 @@ app.get('/api/animals/:id', (req, res) => {
 //-----------------------------------------//
 //------STARTING POST REQUESTS-------------//
 //-----------------------------------------//
+function validateAnimal(animal) {
+  if (!animal.name || typeof animal.name !== 'string') {
+    return false;
+  }
+  if (!animal.species || typeof animal.species !== 'string') {
+    return false;
+  }
+  if (!animal.diet || typeof animal.diet !== 'string') {
+    return false;
+  }
+  if (!animal.personalityTraits || !Array.isArray(animal.personalityTraits)) {
+    return false;
+  }
+  return true
+}
+
+function createNewAnimal(body, animalsArray) {
+  const animal = body;
+  animalsArray.push(animal);//pushes to local version, not real file 
+  fs.writeFileSync(//pushes to real main file
+    path.join(__dirname, './data/animals.json'),//defines sub directory and file tp add into to
+    JSON.stringify({ animals: animalsArray }, null, 2)// save JS array as JSON. Null says dont edit existing data, 2 says give space between old and new data to keep it organized
+  );
+  return animal;
+}
 
 app.post('/api/animals', (req, res) => {
-  // req.body is where our incoming content will be
-  console.log(req.body);
-  res.json(req.body);
+  // set id based on what the next index of the array will be
+  req.body.id = animals.length.toString();
+
+  // if any data in req.body is incorrect, send 400 error back
+  if (!validateAnimal(req.body)) {
+    res.status(400).send('The animal is not properly formatted.');
+  } else {
+    const animal = createNewAnimal(req.body, animals);
+    res.json(animal);
+  }
 });
 
 
