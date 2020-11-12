@@ -10,6 +10,7 @@
 //npm init y
 //will have to run servers each time
 //node server.js - this is how we run the code so we can see it on the server. The http will be http://localhost:PORTNUMBER/DATA/QUALIFIERS
+//fetch() is the front end API equvalent to app.get
 
 const fs = require('fs');
 const path = require('path');
@@ -18,6 +19,7 @@ const express = require('express')
 const { animals } = require('./data/animals'); //rout front end can get data from
 const PORT = process.env.PORT || 3001;
 const app = express(); //startes express
+app.use(express.static('public'));//links all front end files in to live page client side
 //!!!!!!!!!!____________Both ofhte section below MUST BE INCLUDED IF ACCEPTING POST DATA
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));//{ extended: true } means that we may have sub aray data coming in, so it will need ot parse it
@@ -142,6 +144,9 @@ app.post('/api/animals', (req, res) => {
 //-------------------------------------------------//
 //-----STARTING CODE TO CONNECT WITH LIVE PAGE-----//
 //-------------------------------------------------//
+//belows app.get('/') is to default to homepage
+//res.sendFile only sends astreight up file so for out uses our base page HTML file
+//path.join is the universal to find a file
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
