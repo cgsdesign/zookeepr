@@ -25,11 +25,23 @@ const printResults = resultArr => {
 const getAnimals = (formData = {}) => {
   let queryUrl = '/api/animals?';
 
-  Object.entries(formData).forEach(([key, value]) => {
+  Object.entries(formData).forEach(([key, value]) => {///---------------------------ask about this code!!
     queryUrl += `${key}=${value}&`;
   });
 
   console.log(queryUrl);
+  //fetch info from servers
+  fetch(queryUrl)
+  .then(response => {
+    if (!response.ok) {
+      return alert('Error: ' + response.statusText);
+    }
+    return response.json();
+  })
+  .then(animalData => {
+    console.log(animalData);
+    printResults(animalData);
+  });
 
 };
 

@@ -150,6 +150,12 @@ app.post('/api/animals', (req, res) => {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
+app.get('/animals', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+app.get('/zookeepers', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
 
 //CALL SEARCHES LISTENER
 //port below is one of many options, some have restrictions on then while 80 and 443(https) are normal for most sites
